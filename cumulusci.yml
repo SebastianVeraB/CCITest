@@ -1,0 +1,18 @@
+minimum_cumulusci_version: '3.6.0'
+project:
+    name: CCITest
+    package:
+        name:  CCITest
+        api_version: '47.0'
+
+tasks:
+    robot:
+        options:
+            suites: robot/CCITest/tests
+            options:
+                outputdir: robot/CCITest/results
+
+    robot_testdoc:
+        options:
+            path: robot/CCITest/tests
+            output: robot/CCITest/doc/CCITest_tests.html
