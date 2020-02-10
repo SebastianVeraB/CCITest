@@ -1,0 +1,205 @@
+<aura:component >
+    <aura:attribute name="data" type="list"/>
+    <aura:attribute name="singleData" type="Object"/>
+    <aura:attribute name="title" type="String"/>
+    <aura:attribute name="fieldsName" type="String"/>
+    <aura:attribute name="Picklist" type="boolean"/>
+    <aura:attribute name="Alerts" type="boolean"/>
+    <aura:attribute name="Field" type="boolean"/>
+    <aura:attribute name="columnTitlePicklist" type="Map" default="{mirrorApi: 'Picklist Value mirror ApiName', rootApi: 'Picklist Value root ApiName'}"/>
+    <aura:attribute name="columnTitleFields" type="Map" default="{mirrorApi: 'mirror Field ApiName', rootApi: 'root Field ApiName'}"/>
+    <aura:attribute name="columnTitleAlerts" type="Map" default="{mirrorApi: 'mirror Template', rootApi: 'root Template'}"/>
+
+    <aura:handler name='init' value='{!this}' action='{!c.doInit}' />
+    <article class="slds-card" style="width: 60%;">
+        <div class="slds-grid slds-einstein-header slds-card__header">
+            <header class="slds-media slds-media_center slds-has-flexi-truncate">
+                <div class="slds-grid slds-grid_vertical-align-center slds-size_3-of-4 slds-medium-size_2-of-3">
+                    <div class="slds-media__figure">
+                        <span class="slds-icon_container slds-icon-utility-salesforce1">
+
+                        </span>
+                    </div>
+                    <div class="slds-media__body">
+                        <h2 class="slds-truncate" title="Einstein (10+)">
+                            <a href="javascript:void(0);" class="slds-card__header-link" title="Einstein (10+)">
+                                <span class="slds-text-heading_small">{!v.title}</span>
+                            </a>
+                        </h2>
+                        
+                        <p class="slds-page-header__name-meta">• Next Step - Change your mirror field's Api Name to match root file as inticated bellow.</p>
+                    </div>
+                    
+                </div>
+
+                <div class="slds-einstein-header__figure slds-size_1-of-4 slds-medium-size_1-of-3"></div>
+                 
+            </header>
+            <div class="slds-einstein-header__actions">
+                
+            </div>
+        </div>
+
+
+
+
+        
+        <div class="slds-card__body slds-card__body_inner">
+
+            <nav class='slds-var-p-around_medium' role="navigation" aria-label="Breadcrumbs">
+                <ol class="slds-breadcrumb slds-list_horizontal slds-wrap">
+                  <li class="slds-breadcrumb__item">
+                    <aura:if isTrue="{!v.Picklist}">
+                    <a href="javascript:void(0);">Picklist</a>
+                    </aura:if>
+                    <aura:if isTrue="{!v.Field}">
+                        <a href="javascript:void(0);">Field</a>
+                        </aura:if>
+                        <aura:if isTrue="{!v.Alerts}">
+                        <a href="javascript:void(0);">Workflow Email Alerts</a>
+                        </aura:if>
+                  </li>
+                  <li class="slds-breadcrumb__item">
+                    <a href="javascript:void(0);">{!v.fieldsName}</a>
+                  </li>
+                </ol>
+            </nav>
+
+    <table aria-multiselectable="true" class="slds-table slds-table_bordered slds-table_fixed-layout slds-table_resizable-cols" role="grid">
+
+        <thead>
+            <tr class="slds-line-height_reset">
+                <th class="slds-text-align_right" scope="col" style="width:4.25rem">
+                    <span id="column-group-header" class="slds-assistive-text">Choose a row</span>
+                    <div class="slds-th__action slds-th__action_form">
+
+                    </div>
+                </th>
+
+                <aura:if isTrue="{!v.Picklist}">
+                    <th aria-label="{!v.columnTitlePicklist.mirrorApi}" aria-sort="none" class="slds-is-sortable" scope="col">
+                        <div class="slds-th__action slds-text-link_reset" tabindex="0">
+                            <span class="slds-assistive-text">Sort by: </span>
+                            <div class="slds-grid slds-grid_vertical-align-center slds-has-flexi-truncate">
+                                <span style="opacity: 50%;" class="slds-truncate" title="Name">{!v.columnTitlePicklist.mirrorApi}</span>
+                                <span class="slds-icon_container slds-icon-utility-arrowdown">
+
+                                </span>
+                            </div>
+                        </div>
+
+                    </th>
+
+                </aura:if>
+                <aura:if isTrue="{!v.Field}">
+                    <th aria-label="{!v.columnTitleFields.mirrorApi}" aria-sort="none" class="slds-is-sortable" scope="col">
+                        <div class="slds-th__action slds-text-link_reset" tabindex="0">
+                            <span class="slds-assistive-text">Sort by: </span>
+                            <div class="slds-grid slds-grid_vertical-align-center slds-has-flexi-truncate">
+                                <span style="opacity: 50%;" class="slds-truncate" title="Name">{!v.columnTitleFields.mirrorApi}</span>
+                                <span class="slds-icon_container slds-icon-utility-arrowdown">
+
+                                </span>
+                            </div>
+                        </div>
+
+                    </th>
+
+                </aura:if>
+                <aura:if isTrue="{!v.Alerts}">
+
+                    <th aria-label="{!v.columnTitleFields.mirrorApi}" aria-sort="none" class="slds-is-sortable" scope="col">
+                        <div class="slds-th__action slds-text-link_reset" tabindex="0">
+                            <span class="slds-assistive-text">Sort by: </span>
+                            <div class="slds-grid slds-grid_vertical-align-center slds-has-flexi-truncate">
+                                <span style="opacity: 50%;" class="slds-truncate" title="Name">{!v.columnTitleAlerts.mirrorApi}</span>
+                                <span class="slds-icon_container slds-icon-utility-arrowdown">
+
+                                </span>
+                            </div>
+                        </div>
+
+                    </th>
+
+                </aura:if>
+
+
+                <th aria-label="" aria-sort="none" class="slds-is-sortable" scope="col"  style="width:3.25rem">
+                    <div class="slds-th__action slds-text-link_reset" tabindex="0">
+                        <span class="slds-assistive-text">Sort by: </span>
+                        <div class="slds-grid slds-grid_vertical-align-center slds-has-flexi-truncate">
+                            <span class="slds-truncate" title="Name"></span>
+                            <span class="slds-icon_container slds-icon-utility-arrowdown">
+                                
+                            </span>
+                        </div>
+                    </div>
+                </th>
+
+                <aura:if isTrue="{!v.Picklist}">
+                    <th aria-label="{!v.columnTitlePicklist.rootApi}" aria-sort="none" class="slds-is-sortable slds-text-align_right" scope="col">
+
+                        <div class="slds-grid slds-grid_vertical-align-end slds-grid_align-end slds-has-flexi-truncate">
+                            <span style="opacity: 50%;" class="slds-text-align_right" title="Root Api Name">{!v.columnTitlePicklist.rootApi}</span>
+
+                        </div>
+
+
+                    </th>
+
+                </aura:if>
+                <aura:if isTrue="{!v.Field}">
+                    <th aria-label="{!v.columnTitleFields.rootApi}" aria-sort="none" class="slds-is-sortable slds-text-align_right" scope="col">
+
+                        <div class="slds-grid slds-grid_vertical-align-end slds-grid_align-end slds-has-flexi-truncate">
+                            <span style="opacity: 50%;" class="slds-text-align_right" title="Root Api Name">{!v.columnTitleFields.rootApi}</span>
+
+                        </div>
+
+
+                    </th>
+
+                </aura:if>
+                <aura:if isTrue="{!v.Alerts}">
+                    <th aria-label="{!v.columnTitleFields.rootApi}" aria-sort="none" class="slds-is-sortable slds-text-align_right" scope="col">
+
+                        <div class="slds-grid slds-grid_vertical-align-end slds-grid_align-end slds-has-flexi-truncate">
+                            <span style="opacity: 50%;" class="slds-text-align_right" title="Root Api Name">{!v.columnTitleAlerts.rootApi}</span>
+
+                        </div>
+
+
+                    </th>
+
+                </aura:if>
+
+            </tr>
+        </thead>
+        <tbody>
+            <aura:if isTrue="{!!v.Alerts}">
+            <aura:iteration items="{!v.data}" var="item">
+                <c:ApiDiffTableRow mirrorApiName="{! item.mirrorValue}" rootApiName="{! item.rootValue}"/>
+            </aura:iteration>
+            </aura:if>
+            <aura:if isTrue="{!v.Alerts}">
+
+                <c:ApiDiffTableRow mirrorApiName="{! v.singleData.mirrorValue}" rootApiName="{! v.singleData.rootValue}"/>
+            </aura:if>
+        </tbody>
+    </table>
+    
+
+        </div>
+        <footer class="slds-card__footer">
+            
+        </footer>
+    </article>    
+    
+    
+    
+    
+    
+    
+    
+    
+</aura:component>

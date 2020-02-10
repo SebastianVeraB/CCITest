@@ -1,0 +1,171 @@
+<aura:component controller="AppiDiffController" implements="force:appHostable,flexipage:availableForAllPageTypes">
+    <aura:attribute name="isLoading" type="Boolean" default="false" />
+    <aura:attribute name="rootLoaded" type="Boolean" default="false" />
+    <aura:attribute name="showResult" type="Boolean" default="false" />
+    <aura:attribute name="Root" type="String" default="" />
+    <aura:attribute name="rootName" type="String" default="" />
+    <aura:attribute name="mirrorName" type="String" default="" />
+    <aura:attribute name="Mirror" type="String" default="" />
+
+    <aura:attribute name="rootFieldsMap" type="object" default="" />
+    <aura:attribute name="rootPicklistMap" type="object" default="" />
+
+    <aura:attribute name="fieldsApiDifferences" type="list"/>
+    <aura:attribute name="picklistApiDifferences" type="list"/>
+    <aura:attribute name="alertsTemplateDifferences" type="list"/>
+
+    <lightning:notificationsLibrary aura:id="notifLib" />
+    
+	<aura:if isTrue="{!v.showResult}">
+    <aura:if isTrue="{!not(empty(v.fieldsApiDifferences))}">
+        <c:ApiDiffTable Field="true" title="This Fields have the same Label, but different Api Name" data="{!v.fieldsApiDifferences}"/>
+    </aura:if>
+
+    <aura:iteration items="{!v.picklistApiDifferences}" var="item">
+    <c:ApiDiffTable Picklist="true" title="This picklist fields have the same Label, but different Api Name" fieldsName ="{!item.fieldsName}" data="{!item.picklist}"/>
+    </aura:iteration>
+
+    <aura:iteration items="{!v.alertsTemplateDifferences}" var="item">
+        <c:ApiDiffTable Alerts="true" title="This Workflow Email Alerts have the same Api Name, but use diferent Template" fieldsName ="{!item.alertApi}" singleData="{!item}"/>
+    </aura:iteration>
+
+
+</aura:if>
+
+	<aura:if isTrue="{!!v.showResult}">
+    <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open slds-modal_small"
+        aria-labelledby="welcome-mat-100-label" aria-describedby="welcome-mat-100-content" aria-modal="true">
+        <div class="slds-modal__container">
+            <header class="slds-modal__header slds-modal__header_empty">
+                <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close">
+
+                    <span class="slds-assistive-text">Close</span>
+                </button>
+            </header>
+            <div class="slds-modal__content" id="welcome-mat-100-content">
+                <div class="slds-welcome-mat">
+                    <div class="slds-welcome-mat__content slds-grid">
+                        <div class="slds-welcome-mat__info slds-size_1-of-2">
+                            <div class="slds-welcome-mat__info-content">
+                                <h2 id="welcome-mat-100-label" class="slds-welcome-mat__info-title">ApiDiff is Here!</h2>
+                                <p class="slds-welcome-mat__info-description slds-text-longform">Welcome to AppiDiff
+                                    Experience, the modern, beautiful user experience for Cheking Api Names missmatch. With a friendly mindset, we focused on reinventing the environment sync to better
+                                    support your business processes.</p>
+                                <div class="slds-welcome-mat__info-progress slds-welcome-mat__info-progress_complete">
+                                    
+                                    <p>
+                                        <strong>Lightning Explorer</strong>
+                                    </p>
+                                    <p>Start the jurney of Api Names compairson...</p>
+                                </div>
+  
+                            </div>
+                        </div>
+                        <ul class="slds-welcome-mat__tiles slds-size_1-of-2">
+                            
+                            <li aura:id="tileroot" class="slds-welcome-mat__tile">
+                                
+                                 <div  onmousedown="{!c.mouseDown}" onmouseup="{!c.mouseUp}" class="shadow slds-box slds-box_link slds-media slds-file-selector slds-file-selector_integrated slds-file-selector_integrated" style="-webkit-transition-duration: 0.3s; /* Safari */ transition-duration: 0.3s;">
+                                    
+                                     <input type="file" class="slds-file-selector__input slds-assistive-text" onchange="{!c.handleFilesChangeRoot}" id="file-upload-input-01" tabindex="-1"/>
+                                    <label style="cursor: pointer;" for="file-upload-input-01" class="slds-media__figure_fixed-width slds-align_absolute-center">
+                                        <div class="slds-welcome-mat__tile-figure slds-p-right_small">
+                                            <div class="slds-welcome-mat__tile-icon-container">
+                                               
+                                                <lightning:icon aura:id="rootIcon" iconName="utility:upload" size="large" />
+                                                <span
+                                                    class="slds-icon_container slds-icon_container_circle slds-icon-action-check"
+                                                    title="Completed">
+                                                    
+                                                    <span class="slds-assistive-text">Completed</span>
+                                                </span>
+                                            </div>
+                                        </div>
+                                        
+                                    
+                                    <div class="slds-media__body">
+                                        <div class="slds-welcome-mat__tile-body">
+                                            <h3 class="slds-welcome-mat__tile-title">Upload the root file</h3>
+                                            <p class="slds-welcome-mat__tile-description">A root file is the reference file. Generally is the file that we can not, or we are not willing to change. </p>
+                                        </div>
+                                    </div>
+                                </label>
+                                </div>
+                                
+                            </li>
+                           
+                                
+                            <li aura:id="tilemirror" class="slds-welcome-mat__tile">
+                                
+                                <div  onmousedown="{!c.mouseDown}" onmouseup="{!c.mouseUp}" class="shadow slds-box slds-box_link slds-media slds-file-selector slds-file-selector_integrated slds-file-selector_integrated" style="-webkit-transition-duration: 0.3s; /* Safari */ transition-duration: 0.3s;">
+                                    <input type="file" class="slds-file-selector__input slds-assistive-text" onchange="{!c.handleFilesChangeMirror}" id="file-upload-input-02" tabindex="-1" />
+                                   <label style="cursor: pointer;" for="file-upload-input-02" class="slds-media__figure_fixed-width slds-align_absolute-center">
+                                       <div class="slds-welcome-mat__tile-figure slds-p-right_small">
+                                           <div class="slds-welcome-mat__tile-icon-container">
+                                               <lightning:icon aura:id="mirrorIcon" iconName="utility:upload" size="large" />
+                                               <span
+                                                   class="slds-icon_container slds-icon_container_circle slds-icon-action-check"
+                                                   title="Completed">
+                                                   
+                                                   <span class="slds-assistive-text">Completed</span>
+                                               </span>
+                                           </div>
+                                       </div>
+                                       
+                                   
+                                   <div class="slds-media__body">
+                                       <div class="slds-welcome-mat__tile-body">
+                                        <h3 class="slds-welcome-mat__tile-title">Upload the mirror file</h3>
+                                        <p class="slds-welcome-mat__tile-description">A mirror file is the file we want to check. Generally is the file that we are going to apply the changes.</p>
+                                    </div>
+                                   </div>
+                               </label>
+                               </div>
+                               
+                           </li>
+                           
+                         
+                          
+                            <li class="slds-welcome-mat__tile slds-welcome-mat__tile_info-only">
+                                <div style="cursor: default;" onclick="{!c.handleCheck}" href="javascript:void(0);" class="slds-box slds-media">
+                                    <div
+                                        class="slds-media__figure slds-media__figure_fixed-width slds-align_absolute-center">
+                                        <div class="slds-welcome-mat__tile-figure">
+                                            <div class="slds-welcome-mat__tile-icon-container">
+                                                <span class="slds-icon_container slds-icon-utility-knowledge_base">
+                                                    <lightning:icon iconName="utility:file" size="large" />
+                                                </span>
+                                                <span
+                                                    class="slds-icon_container slds-icon_container_circle slds-icon-action-check"
+                                                    title="Completed">
+                                                    
+                                                    <span class="slds-assistive-text">Completed</span>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="slds-media__body">
+                                        <div class="slds-welcome-mat__tile-body">
+                                            <h3 class="slds-welcome-mat__tile-title">Check the Differences</h3>
+                                            <p class="slds-welcome-mat__tile-description">Find out what are your Api Name Differences, discover what are the recomended steps to align the mirror with the root</p>
+                                            
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <lightning:button variant="brand" label="Let's Checkout!" onclick="{!c.handleCheck}"></lightning:button>
+                        </ul>
+                       
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <div class="slds-backdrop slds-backdrop_open"></div>
+    </aura:if>
+
+
+
+
+
+</aura:component>

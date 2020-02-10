@@ -1,0 +1,11 @@
+{
+  "orgName": "CCITest - Beta Test Org",
+  "edition": "Developer",
+  "settings": {
+    "lightningExperienceSettings": {
+      "enableS1DesktopEnabled": true
+    },
+    "chatterSettings": {
+      "enableChatter": true
+    }  }
+}

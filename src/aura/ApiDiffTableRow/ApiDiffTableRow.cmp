@@ -1,0 +1,55 @@
+<aura:component >
+    <aura:attribute name="mirrorApiName" type="String" default="Test mirror Api"/>    
+    <aura:attribute name="rootApiName" type="String" default="Test root Api"/>
+    <aura:attribute name="mirrorLabel" type="String" default="Test mirror Label"/>
+    <aura:attribute name="rootLabel" type="String" default="Test root Label"/>
+    <aura:attribute name="isSelected" type="Boolean" default="false" />
+
+
+	 <tr aria-selected="false" class="slds-hint-parent">
+                <td class="slds-text-align_right" role="gridcell">
+
+                    <div class="slds-form-element">
+                        <label class="slds-checkbox_toggle slds-grid">
+                          <input type="checkbox" name="checkbox-toggle-17" value="checkbox-toggle-17" aria-describedby="checkbox-toggle-17" checked="{!v.isSelected}" onclick="{!c.handleSelect}"/>
+                          <span id="checkbox-toggle-17" class="slds-checkbox_faux_container" aria-live="assertive">
+                            <span class="slds-checkbox_faux"></span>
+                            <span class="slds-checkbox_on">Checked</span>
+                            <span class="slds-checkbox_off">Unchecked</span>
+                          </span>
+                        </label>
+                      </div>
+                </td>
+                <th scope="row">
+                    <div class="slds-text-align_left slds-text-color_destructive " title="{!v.mirrorLabel}">
+
+
+                        <aura:if isTrue="{!v.isSelected}">
+                            <s>{!v.mirrorApiName}</s>
+                            <aura:set attribute="else">
+                                {!v.mirrorApiName}
+                            </aura:set>
+                          </aura:if>
+
+
+
+                    </div>
+                </th>
+                <td role="gridcell">
+                    <div class="slds-grid slds-grid_align-center" title="Changes to make">
+                        <lightning:icon style="opacity:0.5;" size="small" iconName="utility:chevronright"/>
+                    </div>
+                </td>
+                <td role="gridcell">
+                     <div class="slds-text-align_right" title="{!v.rootLabel}">
+                        <aura:if isTrue="{!v.isSelected}">
+                            <s>{!v.rootApiName}</s>
+                            <aura:set attribute="else">
+                                {!v.rootApiName}
+                            </aura:set>
+                          </aura:if>
+                    </div>
+                </td>
+
+            </tr>
+</aura:component>
