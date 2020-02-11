@@ -1,5 +1,4 @@
 <aura:component implements="force:appHostable,flexipage:availableForAllPageTypes">
-    
     <aura:attribute name="isLoading" type="Boolean" default="false" />
     <aura:attribute name="rootLoaded" type="Boolean" default="false" />
     <aura:attribute name="showResult" type="Boolean" default="false" />
